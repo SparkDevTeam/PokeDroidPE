@@ -189,7 +189,7 @@
  }
  
  DatabaseManager.init = function(){
-	var dataStr = IOUtils.readFile(new File(android.os.Environment.getExternalStorageDirectory(),"PokeDroidPE/data.json"));
+	var dataStr = new java.lang.String( ModPE.getBytesFromTexturePack("images/data.json"))+"";
 	PokemonDatabase = JSON.parse(dataStr);
 		
  }
