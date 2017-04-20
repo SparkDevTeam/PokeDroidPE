@@ -45,13 +45,8 @@
 	eval("Android."+name+" = "+pkg+";");
  }
  
- //Import("android.graphics.drawable.NinePatchDrawable","NinePatchDrawable");
- Import("android.graphics.NinePatch","NinePatch");
- Import("android.graphics.BitmapFactory","BitmapFactory");
- Import("android.graphics.Rect","Rect");
- Import("android.graphics.Color","Color")
- Import("android.view.ViewGroup","ViewGroup");
- Android.NinePatchDrawable = android.graphics.drawable.NinePatchDrawable;
+
+
  
  
  
@@ -471,9 +466,9 @@ function guid() {
  MCGUI.ninePatchToDrawable = function(bitmap){
 	
     var chunk = bitmap.getNinePatchChunk();
-    if(Android.NinePatch.isNinePatchChunk(chunk)) {
-        return new Android.NinePatchDrawable(Context.getResources(), bitmap, chunk, new Android.Rect(), null);
-    } else return new Android.BitmapDrawable(bitmap);
+    if(android.graphics.NinePatch.isNinePatchChunk(chunk)) {
+        return new android.graphics.drawable.NinePatchDrawable(Context.getResources(), bitmap, chunk, new android.graphics.Rect(), null);
+    } else return new android.graphics.drawable.BitmapDrawable(bitmap);
  }
  
  MCGUI.uiThread = function(code){
@@ -490,10 +485,10 @@ function guid() {
  MCGUI.fetchResources = function(){
 	var btnN = ModPE.getBytesFromTexturePack("images/gui/button_normal.9.png");
 	clientMessage("Loading resource: "+ btnN.length);
-	MCGUI.Resources.buttonNormal = MCGUI.ninePatchToDrawable(Android.BitmapFactory.decodeByteArray(btnN,0,btnN.length));
+	MCGUI.Resources.buttonNormal = MCGUI.ninePatchToDrawable(android.graphics.BitmapFactory.decodeByteArray(btnN,0,btnN.length));
 	var btnP = ModPE.getBytesFromTexturePack("images/gui/button_pressed.9.png");
 	clientMessage("Loading resource: "+ btnN.length);
-	MCGUI.Resources.buttonPressed = MCGUI.ninePatchToDrawable(Android.BitmapFactory.decodeByteArray(btnP,0,btnP.length));
+	MCGUI.Resources.buttonPressed = MCGUI.ninePatchToDrawable(android.graphics.BitmapFactory.decodeByteArray(btnP,0,btnP.length));
  }
  MCGUI.Button = function(){
 	var b = new android.widget.Button(Context);
@@ -507,15 +502,15 @@ function guid() {
 			if(action == android.view.MotionEvent.ACTION_DOWN)
 			{
 				MCGUI.setBackground(b,MCGUI.Resources.buttonPressed);
-				b.setTextColor(Android.Color.WHITE);
+				b.setTextColor(android.graphics.Color.WHITE);
 			}
 			if(action == android.view.MotionEvent.ACTION_CANCEL || action == android.view.MotionEvent.ACTION_UP)
 			{
 				b.setTag(false);
 				MCGUI.setBackground(b,MCGUI.Resources.buttonNormal);
-				b.setTextColor(Android.Color.parseColor("#4c4c4c"));
+				b.setTextColor(android.graphics.Color.parseColor("#4c4c4c"));
 				
-				var rect = new Android.Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+				var rect = new android.graphics.Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
 				if(rect.contains(v.getLeft() + motionEvent.getX(), v.getTop() + motionEvent.getY()))
 				{
 					
@@ -523,14 +518,14 @@ function guid() {
 			}
 			if(action == android.view.MotionEvent.ACTION_MOVE)
 			{
-				var rect = new Android.Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+				var rect = new android.graphics.Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
 				if(rect.contains(v.getLeft() + motionEvent.getX(), v.getTop() + motionEvent.getY()))
 				{
 					if(v.getTag() == false)
 					{
 						b.setTag(true);
 						MCGUI.setBackground(b,MCGUI.Resources.buttonPressed);
-						b.setTextColor(Android.Color.WHITE);
+						b.setTextColor(android.graphics.Color.WHITE);
 					}
 				} else
 				{
@@ -538,7 +533,7 @@ function guid() {
 					{
 						b.setTag(false);
 						MCGUI.setBackground(b,MCGUI.Resources.buttonNormal);
-						b.setTextColor(Android.Color.parseColor("#4c4c4c"));
+						b.setTextColor(android.graphics.Color.parseColor("#4c4c4c"));
 					}
 				}
 			}
@@ -548,7 +543,7 @@ function guid() {
 	});
 	
 	MCGUI.setBackground(b,MCGUI.Resources.buttonNormal);
-	b.setTextColor(Android.Color.parseColor("#4c4c4c"));
+	b.setTextColor(android.graphics.Color.parseColor("#4c4c4c"));
 				
 	return b;
  }
@@ -560,8 +555,8 @@ function guid() {
  
  MCGUI.createWindow = function(){
 	var pw = new android.widget.PopupWindow();
-	pw.setWidth(Android.ViewGroup.LayoutParams.WRAP_CONTENT);
-	pw.setHeight(Android.ViewGroup.LayoutParams.WRAP_CONTENT);
+	pw.setWidth(android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+	pw.setHeight(android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 	return pw;
  }
  
