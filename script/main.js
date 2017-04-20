@@ -170,7 +170,7 @@
  var DatabaseManager = function(){}
  
  DatabaseManager.getDataByID = function(id){
-	for(var i=0;i<PokemonDatabase.pokemon.length;i++){
+	for(var i=0;i<PokemonDatabase.pokemon.length-1;i++){
 		if(PokemonDatabase.pokemon[i].national_id==id){
 			return PokemonDatabase.pokemon[i];
 		}
@@ -191,7 +191,7 @@
  
  DatabaseManager.getLoadedIDs = function(){
 	var lids = [];
-	for(var i=0;i<PokemonDatabase.pokemon.length;i++){
+	for(var i=0;i<PokemonDatabase.pokemon.length-1;i++){
 		lids.push(PokemonDatabase.pokemon[i].national_id);
 	}
 	return lids;

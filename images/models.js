@@ -68,6 +68,7 @@ rightLeg.addBox(-3,11,-4,2,1,3);
 //left leg
 leftLeg.setTextureOffset(0,11);
 leftLeg.addBox(-3,11,-4,2,1,3);
+return renderer;
 }
 PokemonRenderers["Pikachu"] = addPikachuRenderer(Renderer.createHumanoidRenderer()).renderType;
 
@@ -107,6 +108,7 @@ body.addBox(-3,22,-2, 6, 1, 1);
 
 body.setTextureOffset( 30, 0);
 body.addBox(-3,22,2, 6, 1, 1);
+return renderer;
 
 }
 
