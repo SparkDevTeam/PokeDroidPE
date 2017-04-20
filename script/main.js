@@ -331,6 +331,9 @@
  */
  
  
+ var loaded = false;
+ 
+ 
  function playSound(mName){
 	var file = new java.io.File(path+"res/sounds/"+mName);
 	MediaPlayer.reset();
@@ -406,7 +409,7 @@ function guid() {
  
  function newLevel(){
 	
-	DatabaseManager.init();
+	
 	clientMessage(ChatColor.RED+"Poke"+ChatColor.WHITE+"DroidPE "+ChatColor.GRAY+" by "+ChatColor.BLUE+"SparkDevs\n"+ChatColor.GRAY+"Do not copy/distribute without permission.");
 	
 	MCGUI.uiThread(function(){
@@ -439,6 +442,15 @@ function guid() {
 	ModPE.langEdit("progressScreen.generating","PokeDroid PE: Loading Pokemon");
 	eval( new java.lang.String( ModPE.getBytesFromTexturePack("images/models.js"))+"" );
 	
+ }
+ 
+ function modTick(){
+	if(!loaded){
+		DatabaseManager.init();
+		fetchResources();
+		loaded = true;
+	
+	}
  }
  
  
