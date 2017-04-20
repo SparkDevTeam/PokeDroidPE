@@ -415,12 +415,9 @@ function guid() {
 		var btn = MCGUI.Button();
 		
 		btn.setText("Click ME");
-            btn.setOnClickListener(new android.view.View.OnClickListener({
-                onClick: function(viewarg) {
-                    clientMessage("Test");
-                }
-            }));
+        
         layout.addView(btn);
+		windo.setContentView(btn);
 		
 		windo.showAtLocation(Context.getWindow().getDecorView(), android.view.Gravity.LEFT | android.view.Gravity.TOP, 0, 0);
 		
@@ -477,13 +474,15 @@ function guid() {
  
  MCGUI.fetchResources = function(){
 	var btnN = ModPE.getBytesFromTexturePack("images/gui/button_normal.9.png")
-	MCGUI.Resources.buttonNormal = MCGUI.ninePatchToDrawable(Android.BitmapFactory.decodeByteArray(btnN,0,btnN.length()));
+	clientMessage("Loading resource: "+ btnN.length;
+	MCGUI.Resources.buttonNormal = MCGUI.ninePatchToDrawable(Android.BitmapFactory.decodeByteArray(btnN,0,btnN.length));
 	var btnP = ModPE.getBytesFromTexturePack("images/gui/button_pressed.9.png")
-	MCGUI.Resources.buttonPressed = MCGUI.ninePatchToDrawable(Android.BitmapFactory.decodeByteArray(btnP,0,btnP.length()));
+	MCGUI.Resources.buttonPressed = MCGUI.ninePatchToDrawable(Android.BitmapFactory.decodeByteArray(btnP,0,btnP.length));
  }
  MCGUI.Button = function(){
 	var b = new android.widget.Button(Context);
 	b.setTextSize(14);
+	b.setTag(false);
 	b.setOnTouchListener(new android.view.View.OnTouchListener()
 	{
 		onTouch: function(v, motionEvent)
@@ -531,6 +530,10 @@ function guid() {
 			return false;
 		}
 	});
+	
+	MCGUI.setBackground(b,MCGUI.Resources.buttonNormal);
+	b.setTextColor(Android.Color.parseColor("#4c4c4c"));
+				
 	return b;
  }
  
@@ -551,7 +554,7 @@ function guid() {
  MCGUI.createRootLayout = function(pw){
 	var layout = new android.widget.RelativeLayout(Context);
 	
-	pw.setContentView(layout);
+	
 	return layout;
  }
 
