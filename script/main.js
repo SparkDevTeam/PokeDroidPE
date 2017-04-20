@@ -42,15 +42,17 @@
  var Android = function(){}
  
  var Import = function(pkg,name){
-	eval("Android."+name+" = "+pkg);
+	eval("Android."+name+" = "+pkg+";");
  }
  
- Import("android.graphics.drawable.NinePatchDrawable","NinePatchDrawable");
+ //Import("android.graphics.drawable.NinePatchDrawable","NinePatchDrawable");
  Import("android.graphics.NinePatch","NinePatch");
  Import("android.graphics.BitmapFactory","BitmapFactory");
  Import("android.graphics.Rect","Rect");
  Import("android.graphics.Color","Color")
  Import("android.view.ViewGroup","ViewGroup");
+ Android.NinePatchDrawable = android.graphics.drawable.NinePatchDrawable;
+ 
  
  
 /*
@@ -479,6 +481,7 @@ function guid() {
 		try {
 			code();
 		}catch(problem){ 
+			clientMessage("Error in UI Thread: " + problem)
 			print("Error in UI Thread: " + problem);
 		}
 	}}));
@@ -551,10 +554,8 @@ function guid() {
  }
  
  MCGUI.setBackground = function(v,d){
-	if (android.os.Build.VERSION.SDK_INT>=16)
-		v.setBackground(d);
-	else
-		v.setBackgroundDrawable(d);
+	
+    v.setBackgroundDrawable(d);
  }
  
  MCGUI.createWindow = function(){
