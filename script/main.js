@@ -417,7 +417,7 @@ function guid() {
 		btn.setText("Click ME");
         
         layout.addView(btn);
-		windo.setContentView(btn);
+		windo.setContentView(layout);
 		
 		windo.showAtLocation(Context.getWindow().getDecorView(), android.view.Gravity.LEFT | android.view.Gravity.TOP, 0, 0);
 		
