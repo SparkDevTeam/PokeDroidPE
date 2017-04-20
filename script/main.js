@@ -447,7 +447,7 @@ function guid() {
  function modTick(){
 	if(!loaded){
 		DatabaseManager.init();
-		fetchResources();
+		MCGUI.fetchResources();
 		loaded = true;
 	
 	}
