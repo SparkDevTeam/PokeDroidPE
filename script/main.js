@@ -473,10 +473,11 @@ function guid() {
  }
  
  MCGUI.fetchResources = function(){
-	var btnN = ModPE.getBytesFromTexturePack("images/gui/button_normal.9.png")
-	clientMessage("Loading resource: "+ btnN.length;
+	var btnN = ModPE.getBytesFromTexturePack("images/gui/button_normal.9.png");
+	clientMessage("Loading resource: "+ btnN.length);
 	MCGUI.Resources.buttonNormal = MCGUI.ninePatchToDrawable(Android.BitmapFactory.decodeByteArray(btnN,0,btnN.length));
-	var btnP = ModPE.getBytesFromTexturePack("images/gui/button_pressed.9.png")
+	var btnP = ModPE.getBytesFromTexturePack("images/gui/button_pressed.9.png");
+	clientMessage("Loading resource: "+ btnN.length);
 	MCGUI.Resources.buttonPressed = MCGUI.ninePatchToDrawable(Android.BitmapFactory.decodeByteArray(btnP,0,btnP.length));
  }
  MCGUI.Button = function(){
