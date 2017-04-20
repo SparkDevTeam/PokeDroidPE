@@ -50,6 +50,7 @@
  Import("android.graphics.BitmapFactory","BitmapFactory");
  Import("android.graphics.Rect","Rect");
  Import("android.graphics.Color","Color")
+ Import("android.view.ViewGroup","ViewGroup");
  
  
 /*
@@ -381,7 +382,7 @@ function guid() {
 	if(itemId==280){
 		var p = Level.spawnMob(x,y+2,z,11);
 		var s = new SpawnedPokemon();
-		s.nId = getRandom(0,DatabaseManager.getLoadedIDs()[DatabaseManager.getLoadedIDs().length-1]);
+		s.nId = DatabaseManager.getLoadedIDs()[getRandom(0,DatabaseManager.getLoadedIDs().length-1)];
 		s.attachToEntity(p);
 		spawnedPokemon.push(s);
 	}
@@ -407,6 +408,23 @@ function guid() {
 	
 	DatabaseManager.init();
 	clientMessage(ChatColor.RED+"Poke"+ChatColor.WHITE+"DroidPE "+ChatColor.GRAY+" by "+ChatColor.BLUE+"SparkDevs\n"+ChatColor.GRAY+"Do not copy/distribute without permission.");
+	
+	MCGUI.uiThread(function(){
+		var windo = MCGUI.createWindow();
+		var layout = MCGUI.createRootLayout(windo);
+		var btn = MCGUI.Button();
+		
+		btn.setText("Click ME");
+            btn.setOnClickListener(new android.view.View.OnClickListener({
+                onClick: function(viewarg) {
+                    clientMessage("Test");
+                }
+            }));
+        layout.addView(btn);
+		
+		windo.showAtLocation(Context.getWindow().getDecorView(), android.view.Gravity.LEFT | android.view.Gravity.TOP, 0, 0);
+		
+	});
  }
  
  function leaveGame(){
@@ -521,6 +539,20 @@ function guid() {
 		v.setBackground(d);
 	else
 		v.setBackgroundDrawable(d);
+ }
+ 
+ MCGUI.createWindow = function(){
+	var pw = new android.widget.PopupWindow();
+	pw.setWidth(Android.ViewGroup.LayoutParams.WRAP_CONTENT);
+	pw.setHeight(Android.ViewGroup.LayoutParams.WRAP_CONTENT);
+	return pw;
+ }
+ 
+ MCGUI.createRootLayout = function(pw){
+	var layout = new android.widget.RelativeLayout(Context);
+	
+	pw.setContentView(layout);
+	return layout;
  }
 
  
