@@ -39,8 +39,17 @@
 	Display.WIDTH = metrics.widthPixels;
  };
  
+ var Android = function(){}
  
+ var Import = function(pkg,name){
+	eval("Android."+name+" = "+pkg);
+ }
  
+ Import("android.graphics.drawable.NinePatchDrawable","NinePatchDrawable");
+ Import("android.graphics.NinePatch","NinePatch");
+ Import("android.graphics.BitmapFactory","BitmapFactory");
+ Import("android.graphics.Rect","Rect");
+ Import("android.graphics.Color","Color")
  
  
 /*
@@ -343,6 +352,9 @@ function guid() {
 }
  
  
+ 
+ 
+ 
 /*
  *
  * HOOKS
@@ -415,5 +427,100 @@ function guid() {
  }
  
  
+ 
+ 
+ /*
+ *
+ * MC-GUI
+ *
+ */
+ 
+ var MCGUI = function(){}
+ 
+ MCGUI.Resources = function(){}
+ 
+ MCGUI.ninePatchToDrawable = function(bitmap){
+	
+    var chunk = bitmap.getNinePatchChunk();
+    if(Android.NinePatch.isNinePatchChunk(chunk)) {
+        return new Android.NinePatchDrawable(Context.getResources(), bitmap, chunk, new Android.Rect(), null);
+    } else return new Android.BitmapDrawable(bitmap);
+ }
+ 
+ MCGUI.uiThread = function(code){
+	Context.runOnUiThread(new java.lang.Runnable( { run: function() {
+		try {
+			code();
+		}catch(problem){ 
+			print("Error in UI Thread: " + problem);
+		}
+	}}));
+ }
+ 
+ MCGUI.fetchResources = function(){
+	var btnN = ModPE.getBytesFromTexturePack("images/gui/button_normal.9.png")
+	MCGUI.Resources.buttonNormal = MCGUI.ninePatchToDrawable(Android.BitmapFactory.decodeByteArray(btnN,0,btnN.length()));
+	var btnP = ModPE.getBytesFromTexturePack("images/gui/button_pressed.9.png")
+	MCGUI.Resources.buttonPressed = MCGUI.ninePatchToDrawable(Android.BitmapFactory.decodeByteArray(btnP,0,btnP.length()));
+ }
+ MCGUI.Button = function(){
+	var b = new android.widget.Button(Context);
+	b.setTextSize(14);
+	b.setOnTouchListener(new android.view.View.OnTouchListener()
+	{
+		onTouch: function(v, motionEvent)
+		{
+			var action = motionEvent.getActionMasked();
+			if(action == android.view.MotionEvent.ACTION_DOWN)
+			{
+				MCGUI.setBackground(b,MCGUI.Resources.buttonPressed);
+				b.setTextColor(Android.Color.WHITE);
+			}
+			if(action == android.view.MotionEvent.ACTION_CANCEL || action == android.view.MotionEvent.ACTION_UP)
+			{
+				b.setTag(false);
+				MCGUI.setBackground(b,MCGUI.Resources.buttonNormal);
+				b.setTextColor(Android.Color.parseColor("#4c4c4c"));
+				
+				var rect = new Android.Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+				if(rect.contains(v.getLeft() + motionEvent.getX(), v.getTop() + motionEvent.getY()))
+				{
+					
+				}
+			}
+			if(action == android.view.MotionEvent.ACTION_MOVE)
+			{
+				var rect = new Android.Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+				if(rect.contains(v.getLeft() + motionEvent.getX(), v.getTop() + motionEvent.getY()))
+				{
+					if(v.getTag() == false)
+					{
+						b.setTag(true);
+						MCGUI.setBackground(b,MCGUI.Resources.buttonPressed);
+						b.setTextColor(Android.Color.WHITE);
+					}
+				} else
+				{
+					if(v.getTag() == true)
+					{
+						b.setTag(false);
+						MCGUI.setBackground(b,MCGUI.Resources.buttonNormal);
+						b.setTextColor(Android.Color.parseColor("#4c4c4c"));
+					}
+				}
+			}
+
+			return false;
+		}
+	});
+	return b;
+ }
+ 
+ MCGUI.setBackground = function(v,d){
+	if (android.os.Build.VERSION.SDK_INT>=16)
+		v.setBackground(d);
+	else
+		v.setBackgroundDrawable(d);
+ }
 
  
