@@ -408,7 +408,15 @@ function guid() {
 	
 	
 	clientMessage(ChatColor.RED+"Poke"+ChatColor.WHITE+"DroidPE "+ChatColor.GRAY+" by "+ChatColor.BLUE+"SparkDevs\n"+ChatColor.GRAY+"Do not copy/distribute without permission.");
-	
+	MCGUI.uiThread(function(){
+			var windo = MCGUI.createWindow();
+			var layout = MCGUI.createRootLayout(windo);
+			var btn = MCGUI.Button();
+			btn.setText("CLICK ME");
+			layout.addView(btn);
+			windo.setContentView(layout);
+			windo.showAtLocation(Context.getWindow().getDecorView(), android.view.Gravity.LEFT | android.view.Gravity.TOP, 0, 0);
+		});
 	
  }
  
@@ -426,20 +434,9 @@ function guid() {
  function selectLevelHook(){
 	ModPE.langEdit("progressScreen.generating","PokeDroid PE: Loading Pokemon");
 	eval( new java.lang.String( ModPE.getBytesFromTexturePack("images/models.js"))+"" );
-	if(!loaded){
-	DatabaseManager.init();
-		MCGUI.fetchResources();
-		loaded = true;
-		MCGUI.uiThread(function(){
-			var windo = MCGUI.createWindow();
-			var layout = MCGUI.createRootLayout(windo);
-			var btn = MCGUI.Button();
-			btn.setText("CLICK ME");
-			layout.addView(btn);
-			windo.setContentView(layout);
-			windo.showAtLocation(Context.getWindow().getDecorView(), android.view.Gravity.LEFT | android.view.Gravity.TOP, 0, 0);
-		});
-		}
+
+		
+		
 	
  }
  
@@ -591,4 +588,18 @@ function guid() {
 	return layout;
  }
 
+ new java.lang.Thread(new java.lang.Runnable()
+{
+	run: function()
+	{
+		try
+		{
+			DatabaseManager.init();
+			MCGUI.fetchResources();
+		} catch(e)
+		{
+			MCPE.log("Error " + e);
+		}
+	}
+}).start();
  
