@@ -491,16 +491,16 @@ function guid() {
  var buttonPressedDrawable;
  
  MCGUI.fetchResources = function(){
-	var btnN = ModPE.getBytesFromTexturePack("images/gui/button_normal.png");
+	var btnN = ModPE.getBytesFromTexturePack("images/gui/button_normal.9.png");
 	ModPE.log("Loading resource: "+ btnN.length);
 	
 	var btnNb = android.graphics.BitmapFactory.decodeByteArray(btnN,0,btnN.length);
-	ModPE.log("Bitmap is null: " + ((btnNb==null) ? "true" : "false"));
+	ModPE.log("Bitmap is null: " + (btnNb==null));
 	
 	buttonNormalDrawable = MCGUI.ninePatchToDrawable(btnNb);
 	
 	
-	var btnP = ModPE.getBytesFromTexturePack("images/gui/button_pressed.png");
+	var btnP = ModPE.getBytesFromTexturePack("images/gui/button_pressed.9.png");
 	ModPE.log("Loading resource: "+ btnN.length);
 	
 	var btnPb = android.graphics.BitmapFactory.decodeByteArray(btnP,0,btnP.length);
