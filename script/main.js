@@ -426,12 +426,8 @@ function guid() {
  function selectLevelHook(){
 	ModPE.langEdit("progressScreen.generating","PokeDroid PE: Loading Pokemon");
 	eval( new java.lang.String( ModPE.getBytesFromTexturePack("images/models.js"))+"" );
-	
- }
- 
- function modTick(){
 	if(!loaded){
-		DatabaseManager.init();
+	DatabaseManager.init();
 		MCGUI.fetchResources();
 		loaded = true;
 		MCGUI.uiThread(function(){
@@ -443,6 +439,13 @@ function guid() {
 			windo.setContentView(layout);
 			windo.showAtLocation(Context.getWindow().getDecorView(), android.view.Gravity.LEFT | android.view.Gravity.TOP, 0, 0);
 		});
+		}
+	
+ }
+ 
+ function modTick(){
+	if(!loaded){
+		
 	}
 	
  }
@@ -461,11 +464,11 @@ function guid() {
  MCGUI.Resources = function(){}
  
  MCGUI.ninePatchToDrawable = function(bitmap){
-	ModPE.log("Bitmap is null: " + (bitmap==null) ? true : false);
+	
 	var np = new android.graphics.NinePatch(bitmap, bitmap.getNinePatchChunk(), null);
-	ModPE.log("NinePatch is null: " + (np==null) ? true : false);
+	ModPE.log("NinePatch is null: " + ((np==null) ? "true" : "false"));
     var npd = new android.graphics.drawable.NinePatchDrawable(np);
-	ModPE.log("NinePatchDrawable is null: " + (npd==null) ? true : false);
+	ModPE.log("NinePatchDrawable is null: " + ((npd==null) ? "true" : "false"));
     
  }
  
@@ -481,13 +484,28 @@ function guid() {
 	}}));
  }
  
+ var buttonNormalDrawable;
+ var buttonPressedDrawable;
+ 
  MCGUI.fetchResources = function(){
 	var btnN = ModPE.getBytesFromTexturePack("images/gui/button_normal.9.png");
 	ModPE.log("Loading resource: "+ btnN.length);
-	MCGUI.Resources.buttonNormal = MCGUI.ninePatchToDrawable(android.graphics.BitmapFactory.decodeByteArray(btnN,0,btnN.length));
+	
+	var btnNb = android.graphics.BitmapFactory.decodeByteArray(btnN,0,btnN.length);
+	ModPE.log("Bitmap is null: " + ((btnNb==null) ? "true" : "false"));
+	
+	buttonNormalDrawable = MCGUI.ninePatchToDrawable(btnNb);
+	
+	
 	var btnP = ModPE.getBytesFromTexturePack("images/gui/button_pressed.9.png");
 	ModPE.log("Loading resource: "+ btnN.length);
-	MCGUI.Resources.buttonPressed = MCGUI.ninePatchToDrawable(android.graphics.BitmapFactory.decodeByteArray(btnP,0,btnP.length));
+	
+	var btnPb = android.graphics.BitmapFactory.decodeByteArray(btnP,0,btnP.length);
+	ModPE.log("Bitmap is null: " + ((btnPb==null) ? "true" : "false"));
+	
+	buttonPressedDrawable = MCGUI.ninePatchToDrawable(btnPb);
+	
+	
  }
  MCGUI.Button = function(){
 	var b = new android.widget.Button(Context);
@@ -502,13 +520,13 @@ function guid() {
 			var action = motionEvent.getActionMasked();
 			if(action == android.view.MotionEvent.ACTION_DOWN)
 			{
-				MCGUI.setBackground(b,MCGUI.Resources.buttonPressed);
+				MCGUI.setBackground(b,buttonPressedDrawable);
 				b.setTextColor(android.graphics.Color.WHITE);
 			}
 			if(action == android.view.MotionEvent.ACTION_CANCEL || action == android.view.MotionEvent.ACTION_UP)
 			{
 				b.setTag(false);
-				MCGUI.setBackground(b,MCGUI.Resources.buttonNormal);
+				MCGUI.setBackground(b,buttonNormalDrawable);
 				b.setTextColor(android.graphics.Color.parseColor("#4c4c4c"));
 				
 				var rect = new android.graphics.Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
@@ -525,7 +543,7 @@ function guid() {
 					if(v.getTag() == false)
 					{
 						b.setTag(true);
-						MCGUI.setBackground(b,MCGUI.Resources.buttonPressed);
+						MCGUI.setBackground(b,buttonPressedDrawable);
 						b.setTextColor(android.graphics.Color.WHITE);
 					}
 				} else
@@ -533,7 +551,7 @@ function guid() {
 					if(v.getTag() == true)
 					{
 						b.setTag(false);
-						MCGUI.setBackground(b,MCGUI.Resources.buttonNormal);
+						MCGUI.setBackground(b,buttonNormalDrawable);
 						b.setTextColor(android.graphics.Color.parseColor("#4c4c4c"));
 					}
 				}
@@ -543,7 +561,7 @@ function guid() {
 		}
 	});
 	
-	MCGUI.setBackground(b,MCGUI.Resources.buttonNormal);
+	MCGUI.setBackground(b,buttonNormalDrawable);
 	b.setTextColor(android.graphics.Color.parseColor("#4c4c4c"));
 
 	
@@ -552,6 +570,7 @@ function guid() {
  }
  
  MCGUI.setBackground = function(v,d){
+	ModPE.log("SetBackground: "+(d==null));
     if (android.os.Build.VERSION.SDK_INT >= 16)
 		v.setBackground(d);
 	else
