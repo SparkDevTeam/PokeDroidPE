@@ -461,11 +461,7 @@ function guid() {
  MCGUI.Resources = function(){}
  
  MCGUI.ninePatchToDrawable = function(bitmap){
-	if(!android.graphics.NinePatch.isNinePatchChunk(bitmap.getNinePatchChunk())){
-		ModPE.log("Bitmap is not nine patch.");
-		
-		return new android.graphics.drawable.BitmapDrawable(bitmap);
-	}
+	
 	var np = new android.graphics.NinePatch(bitmap, bitmap.getNinePatchChunk(),null);
 	ModPE.log("NinePatch is null: " + ((np==null) ? "true" : "false"));
     var npd = new android.graphics.drawable.NinePatchDrawable(np);
