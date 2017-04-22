@@ -553,9 +553,9 @@ function guid() {
  
  MCGUI.setBackground = function(v,d){
     if (android.os.Build.VERSION.SDK_INT >= 16)
-		v.setBackground(background);
+		v.setBackground(d);
 	else
-		v.setBackgroundDrawable(background);
+		v.setBackgroundDrawable(d);
  }
  
  MCGUI.createWindow = function(){
