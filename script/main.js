@@ -476,6 +476,7 @@ function guid() {
 		}catch(problem){ 
 			clientMessage("Error in UI Thread: " + problem)
 			print("Error in UI Thread: " + problem);
+			ModPE.log("Error in UI Thread: " + problem);
 		}
 	}}));
  }
