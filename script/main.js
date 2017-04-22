@@ -493,6 +493,8 @@ function guid() {
 	var b = new android.widget.Button(Context);
 	b.setTextSize(14);
 	b.setTag(false);
+	b.setSoundEffectsEnabled(false);
+	b.setGravity(android.view.Gravity.CENTER);
 	b.setOnTouchListener(new android.view.View.OnTouchListener()
 	{
 		onTouch: function(v, motionEvent)
@@ -543,13 +545,17 @@ function guid() {
 	
 	MCGUI.setBackground(b,MCGUI.Resources.buttonNormal);
 	b.setTextColor(android.graphics.Color.parseColor("#4c4c4c"));
+
+	
 				
 	return b;
  }
  
  MCGUI.setBackground = function(v,d){
-	
-    v.setBackgroundDrawable(d);
+    if (android.os.Build.VERSION.SDK_INT >= 16)
+		v.setBackground(background);
+	else
+		v.setBackgroundDrawable(background);
  }
  
  MCGUI.createWindow = function(){
