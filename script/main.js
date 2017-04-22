@@ -462,10 +462,15 @@ function guid() {
  
  MCGUI.ninePatchToDrawable = function(bitmap){
 	
+	if(!android.graphics.NinePatch.isNinePatchChunk(bitmap.getNinePatchChunk())){
+		ModPE.log("Bitmap is not 9 patch.");
+		return new android.graphics.drawable.BitmapDrawable(bitmap);
+	}
+	
 	var np = new android.graphics.NinePatch(bitmap, bitmap.getNinePatchChunk(),null);
-	ModPE.log("NinePatch is null: " + ((np==null) ? "true" : "false"));
+	ModPE.log("NinePatch is null: " + (np==null));
     var npd = new android.graphics.drawable.NinePatchDrawable(np);
-	ModPE.log("NinePatchDrawable is null: " + ((npd==null) ? "true" : "false"));
+	ModPE.log("NinePatchDrawable is null: " + (npd==null));
     
 	return npd;
  }
