@@ -487,8 +487,7 @@ function guid() {
 	}}));
  }
  
- var buttonNormalDrawable;
- var buttonPressedDrawable;
+
  
  MCGUI.fetchResources = function(){
 	var btnN = ModPE.getBytesFromTexturePack("images/gui/button_normal.9.png");
@@ -497,7 +496,7 @@ function guid() {
 	var btnNb = android.graphics.BitmapFactory.decodeByteArray(btnN,0,btnN.length);
 	ModPE.log("Bitmap is null: " + (btnNb==null));
 	
-	buttonNormalDrawable = MCGUI.ninePatchToDrawable(btnNb);
+	MCGUI.Resources.buttonNormal = MCGUI.ninePatchToDrawable(btnNb);
 	
 	
 	var btnP = ModPE.getBytesFromTexturePack("images/gui/button_pressed.9.png");
@@ -506,7 +505,7 @@ function guid() {
 	var btnPb = android.graphics.BitmapFactory.decodeByteArray(btnP,0,btnP.length);
 	ModPE.log("Bitmap is null: " + (btnPb==null));
 	
-	buttonPressedDrawable = MCGUI.ninePatchToDrawable(btnPb);
+	MCGUI.Resources.buttonPressed = MCGUI.ninePatchToDrawable(btnPb);
 	
 	
  }
@@ -523,13 +522,13 @@ function guid() {
 			var action = motionEvent.getActionMasked();
 			if(action == android.view.MotionEvent.ACTION_DOWN)
 			{
-				MCGUI.setBackground(b,buttonPressedDrawable);
+				MCGUI.setBackground(b,MCGUI.Resources.buttonPressed);
 				b.setTextColor(android.graphics.Color.WHITE);
 			}
 			if(action == android.view.MotionEvent.ACTION_CANCEL || action == android.view.MotionEvent.ACTION_UP)
 			{
 				b.setTag(false);
-				MCGUI.setBackground(b,buttonNormalDrawable);
+				MCGUI.setBackground(b,MCGUI.Resources.buttonNormal);
 				b.setTextColor(android.graphics.Color.parseColor("#4c4c4c"));
 				
 				var rect = new android.graphics.Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
@@ -546,7 +545,7 @@ function guid() {
 					if(v.getTag() == false)
 					{
 						b.setTag(true);
-						MCGUI.setBackground(b,buttonPressedDrawable);
+						MCGUI.setBackground(b,MCGUI.Resources.buttonPressed);
 						b.setTextColor(android.graphics.Color.WHITE);
 					}
 				} else
@@ -554,7 +553,7 @@ function guid() {
 					if(v.getTag() == true)
 					{
 						b.setTag(false);
-						MCGUI.setBackground(b,buttonNormalDrawable);
+						MCGUI.setBackground(b,MCGUI.Resources.buttonNormal);
 						b.setTextColor(android.graphics.Color.parseColor("#4c4c4c"));
 					}
 				}
@@ -564,7 +563,7 @@ function guid() {
 		}
 	});
 	
-	MCGUI.setBackground(b,buttonNormalDrawable);
+	MCGUI.setBackground(b,MCGUI.Resources.buttonNormal);
 	b.setTextColor(android.graphics.Color.parseColor("#4c4c4c"));
 
 	
