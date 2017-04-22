@@ -465,10 +465,8 @@ function guid() {
  
  MCGUI.ninePatchToDrawable = function(bitmap){
 	
-    var chunk = bitmap.getNinePatchChunk();
-    if(android.graphics.NinePatch.isNinePatchChunk(chunk)) {
-        return new android.graphics.drawable.NinePatchDrawable(Context.getResources(), bitmap, chunk, new android.graphics.Rect(), null);
-    } else return new android.graphics.drawable.BitmapDrawable(bitmap);
+    return new android.graphics.drawable.NinePatchDrawable(new android.graphics.NinePatch(bitmap, bitmap.getNinePatchChunk(), null));
+    
  }
  
  MCGUI.uiThread = function(code){
