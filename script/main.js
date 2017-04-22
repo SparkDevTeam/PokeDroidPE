@@ -409,19 +409,7 @@ function guid() {
 	
 	clientMessage(ChatColor.RED+"Poke"+ChatColor.WHITE+"DroidPE "+ChatColor.GRAY+" by "+ChatColor.BLUE+"SparkDevs\n"+ChatColor.GRAY+"Do not copy/distribute without permission.");
 	
-	MCGUI.uiThread(function(){
-		var windo = MCGUI.createWindow();
-		var layout = MCGUI.createRootLayout(windo);
-		var btn = MCGUI.Button();
-		
-		btn.setText("Click ME");
-        
-        layout.addView(btn);
-		windo.setContentView(layout);
-		
-		windo.showAtLocation(Context.getWindow().getDecorView(), android.view.Gravity.LEFT | android.view.Gravity.TOP, 0, 0);
-		
-	});
+	
  }
  
  function leaveGame(){
@@ -446,8 +434,17 @@ function guid() {
 		DatabaseManager.init();
 		MCGUI.fetchResources();
 		loaded = true;
-	
+		MCGUI.uiThread(function(){
+			var windo = MCGUI.createWindow();
+			var layout = MCGUI.createRootLayout(windo);
+			var btn = MCGUI.Button();
+			btn.setText("CLICK ME");
+			layout.addView(btn);
+			windo.setContentView(layout);
+			windo.showAtLocation(Context.getWindow().getDecorView(), android.view.Gravity.LEFT | android.view.Gravity.TOP, 0, 0);
+		});
 	}
+	
  }
  
  
@@ -464,8 +461,11 @@ function guid() {
  MCGUI.Resources = function(){}
  
  MCGUI.ninePatchToDrawable = function(bitmap){
-	
-    return new android.graphics.drawable.NinePatchDrawable(new android.graphics.NinePatch(bitmap, bitmap.getNinePatchChunk(), null));
+	ModPE.log("Bitmap is null: " + (bitmap==null) ? true : false);
+	var np = new android.graphics.NinePatch(bitmap, bitmap.getNinePatchChunk(), null);
+	ModPE.log("NinePatch is null: " + (np==null) ? true : false);
+    var npd = new android.graphics.drawable.NinePatchDrawable(np);
+	ModPE.log("NinePatchDrawable is null: " + (npd==null) ? true : false);
     
  }
  
@@ -483,10 +483,10 @@ function guid() {
  
  MCGUI.fetchResources = function(){
 	var btnN = ModPE.getBytesFromTexturePack("images/gui/button_normal.9.png");
-	clientMessage("Loading resource: "+ btnN.length);
+	ModPE.log("Loading resource: "+ btnN.length);
 	MCGUI.Resources.buttonNormal = MCGUI.ninePatchToDrawable(android.graphics.BitmapFactory.decodeByteArray(btnN,0,btnN.length));
 	var btnP = ModPE.getBytesFromTexturePack("images/gui/button_pressed.9.png");
-	clientMessage("Loading resource: "+ btnN.length);
+	ModPE.log("Loading resource: "+ btnN.length);
 	MCGUI.Resources.buttonPressed = MCGUI.ninePatchToDrawable(android.graphics.BitmapFactory.decodeByteArray(btnP,0,btnP.length));
  }
  MCGUI.Button = function(){
