@@ -387,9 +387,9 @@
 		layout.setOrientation(Android.LinearLayout.VERTICAL);
 		for(var i=0;i<6;i++){
 			var btn = new android.widget.ImageButton(Context);
-			btn.setWidth((Display.HEIGHT*0.6)/6);
-			btn.setHeight((Display.HEIGHT*0.6)/6);
+			btn.setLayoutParams(new LinearLayout.LayoutParams((Display.HEIGHT*0.6)/6,(Display.HEIGHT*0.6)/6));
 			btn.setPadding(0,4,0,8);
+			btn.setScaleType(android.widget.ImageView.ScaleType.FIT_CENTER);
 			if(i==0){ //Top
 				MCGUI.setBackground(btn,MCGUI.Resources.pokeInvTop);
 			} else if(i==5){ //Bottom
@@ -404,8 +404,6 @@
 		}
 		
 		PIWindow.setContentView(layout);
-		PIWindow.setWidth(android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-		PIWindow.setHeight(android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
 		PIWindow.showAtLocation(Context.getWindow().getDecorView(), android.view.Gravity.LEFT | android.view.Gravity.CENTER_VERTICAL, 0, 0);
 	});
 
@@ -537,19 +535,23 @@ function guid() {
  
  function leaveGame(){
 	var es = Entity.getAll();
+	
 	for(var i=0;i<es.length;i++){
 		var d = Entity.getExtraData(es[i],"sparkdevs.pokedroid.pokemonId");
 		if(d!=null && d!="") Entity.remove(es[i]);
 	}
+	
 	spawnedPokemon = [];
 	
-	for(var i = 0;i<uiWindows.length;i++){
-		if(uiWindows[i]!=null){
-			uiWindows[i].dismiss();
-			uiWindows[i] = null;
-			
+	MCGUI.uiThread(function(){
+		for(var i = 0;i<uiWindows.length;i++){
+			if(uiWindows[i]!=null){
+				uiWindows[i].dismiss();
+				uiWindows[i] = null;
+			}
 		}
-	}
+	});
+	
 	PokemonInventoryUI.hide();
  }
  
@@ -688,7 +690,7 @@ function guid() {
 				var rect = new android.graphics.Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
 				if(rect.contains(v.getLeft() + motionEvent.getX(), v.getTop() + motionEvent.getY()))
 				{
-					Level.playSoundEnt(Player.getEntity(), "random.click", 100, 30);
+					Level.playSoundEnt(Player.getEntity(), "random.click", 100, 100);
 				}
 			}
 			if(action == android.view.MotionEvent.ACTION_MOVE)
