@@ -689,15 +689,19 @@ function guid() {
 	MCGUI.Resources.pokemonPlaceholder.setDither(false);
 	MCGUI.Resources.pokemonPlaceholder.setAntiAlias(false);
 	
+	try{
+		var fontBytes = ModPE.getBytesFromTexturePack("images/minecraft.ttf");
+		var file = new java.io.File(getDataFolder().getAbsolutePath(),"font.ttf");
+		if(file.exists()) file.delete();
+		file.createNewFile();
+		var stream = new java.io.FileOutputStream(file);
+		stream.write(fontBytes);
+		stream.close();
+		MCGUI.Resources.font = android.graphics.Typeface.createFromFile(file);
+	}catch(err){
+		ModPE.log("Error when fetching font: "+err);
+	}
 	
-	var fontBytes = ModPE.getBytesFromTexturePack("images/minecraft.ttf");
-	var file = new java.io.File(getDataFolder().getAbsolutePath(),"font.ttf");
-	if(file.exists()) file.delete();
-	file.createNewFile();
-	var stream = new java.io.FileOutputStream(file);
-	stream.write(byteArray);
-	stream.close();
-	MCGUI.Resources.font = android.graphics.Typeface.createFromFile(file);
 	
 	
 	
@@ -798,7 +802,7 @@ function guid() {
 			MCGUI.fetchResources();
 		} catch(e)
 		{
-			MCPE.log("Error " + e);
+			ModPE.log("Error " + e);
 		}
 	}
 }).start();
