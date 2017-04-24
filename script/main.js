@@ -45,7 +45,7 @@
 	eval("Android."+name+" = "+pkg+";");
  }
  
-
+ Import("android.widget.LinearLayout","LinearLayout");
 
  
  
@@ -318,6 +318,117 @@
  
  var ItemPotion = new PotionItem(710,20).register("potion","Potion");
  
+
+/*
+ *
+ * POKEMON INVENTORY
+ *
+ */ 
+
+ 
+ var partyPokemon = [null,null,null,null,null,null];
+ 
+ PartyPokemon.hasSpace = function(){
+	for(var i=0;i<6;i++){
+		if(partyPokemon[i]==null){
+			return true;
+		}
+	}
+	return false;
+ }
+ 
+ PartyPokemon.contains = function(id){
+	for(var i=0;i<6;i++){
+		if(partyPokemon[i]!=null){
+			if(partyPokemon[i].nId==id) return true;
+		}
+	}
+	return false;
+ }
+ 
+ PartyPokemon.addPokemon = function(poke){
+	PartyPokemon.reorganize();
+	for(var i=0;i<6;i++){
+		if(partyPokemon[i]==null){
+			partyPokemon[i] = poke;
+			return true;
+		}
+	}
+	return false;
+ }
+ 
+ PartyPokemon.reorganize = function(){
+	var i, t;
+    for (i = partyPokemon.length-1; i>=0; i--) {
+        if(partyPokemon[i] === null) {
+            t = partyPokemon.splice(i, 1);
+            partyPokemon.push(t[0]);
+        }
+    }
+ }
+ 
+ 
+/*
+ *
+ * POKEMON INVENTORY GUI
+ *
+ */ 
+ 
+ 
+ var PokemonInventoryUI = function(){
+ 
+ }
+ var PIButtons = [null,null,null,null,null,null];
+ var PIWindow = null;
+ PokemonInventoryUI.show = function(){
+	MCGUI.uiThread(function(){
+		PIWindow = MCGUI.createWindow();
+		var layout = MCGUI.createRootLayout(Layout.LINEAR);
+		layout.setOrientation(Android.LinearLayout.VERTICAL);
+		for(var i=0;i<6;i++){
+			var btn = new android.widget.ImageButton(Context);
+			btn.setWidth((Display.HEIGHT*0.6)/6);
+			btn.setHeight((Display.HEIGHT*0.6)/6);
+			btn.setPadding(0,4,0,8);
+			if(i==0){ //Top
+				MCGUI.setBackground(btn,MCGUI.Resources.pokeInvTop);
+			} else if(i==5){ //Bottom
+				MCGUI.setBackground(btn,MCGUI.Resources.pokeInvBottom);
+			} else{ //Middle
+				MCGUI.setBackground(btn,MCGUI.Resources.pokeInvMiddle);
+			}
+			//btn.setImageDrawable(MCGUI.Resources.pokemonPlaceholder);
+			layout.addView(btn);
+			PIButtons[i] = btn;
+			
+		}
+		
+		PIWindow.setContentView(layout);
+		PIWindow.setWidth(android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+		PIWindow.setHeight(android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
+		PIWindow.showAtLocation(Context.getWindow().getDecorView(), android.view.Gravity.LEFT | android.view.Gravity.CENTER_VERTICAL, 0, 0);
+	});
+
+ }
+ 
+ PokemonInventoryUI.hide = function(){
+	MCGUI.uiThread(function(){
+		PIWindow.dismiss();
+		PIWindow = null;
+	});
+ }
+ 
+ PokemonInventoryUI.update = function(){
+	MCGUI.uiThread(function(){
+		
+	});
+ }
+ 
+ PokemonInventoryUI.isShowing = function(){
+	return (PIWindow==null)
+ }
+ 
+ 
  
  
  
@@ -330,6 +441,7 @@
  
  var loaded = false;
  
+ var uiWindows = [];
  
  function playSound(mName){
 	var file = new java.io.File(path+"res/sounds/"+mName);
@@ -410,25 +522,35 @@ function guid() {
 	clientMessage(ChatColor.RED+"Poke"+ChatColor.WHITE+"DroidPE "+ChatColor.GRAY+" by "+ChatColor.BLUE+"SparkDevs\n"+ChatColor.GRAY+"Do not copy/distribute without permission.");
 	MCGUI.uiThread(function(){
 			var windo = MCGUI.createWindow();
-			var layout = MCGUI.createRootLayout(windo);
+			
+			var layout = MCGUI.createRootLayout(Layout.RELATIVE);
 			var btn = MCGUI.Button();
 			btn.setText("CLICK ME");
 			layout.addView(btn);
 			windo.setContentView(layout);
 			windo.showAtLocation(Context.getWindow().getDecorView(), android.view.Gravity.LEFT | android.view.Gravity.TOP, 0, 0);
+			uiWindows.push(windo);
 		});
+	PokemonInventoryUI.show();
 	
  }
  
  function leaveGame(){
-	
-	
 	var es = Entity.getAll();
-	for(var i=0;i<=es.length;i++){
+	for(var i=0;i<es.length;i++){
 		var d = Entity.getExtraData(es[i],"sparkdevs.pokedroid.pokemonId");
 		if(d!=null && d!="") Entity.remove(es[i]);
 	}
 	spawnedPokemon = [];
+	
+	for(var i = 0;i<uiWindows.length;i++){
+		if(uiWindows[i]!=null){
+			uiWindows[i].dismiss();
+			uiWindows[i] = null;
+			
+		}
+	}
+	PokemonInventoryUI.hide();
  }
  
  function selectLevelHook(){
@@ -459,6 +581,11 @@ function guid() {
  var MCGUI = function(){}
  
  MCGUI.Resources = function(){}
+ 
+ var Layout = {
+	RELATIVE: android.widget.RelativeLayout,
+	LINEAR: android.widget.LinearLayout
+ };
  
  MCGUI.ninePatchToDrawable = function(bitmap){
 	
@@ -500,12 +627,39 @@ function guid() {
 	
 	
 	var btnP = ModPE.getBytesFromTexturePack("images/gui/button_pressed.9.png");
-	ModPE.log("Loading resource: "+ btnN.length);
+	ModPE.log("Loading resource: "+ btnP.length);
 	
 	var btnPb = android.graphics.BitmapFactory.decodeByteArray(btnP,0,btnP.length);
 	ModPE.log("Bitmap is null: " + (btnPb==null));
 	
 	MCGUI.Resources.buttonPressed = MCGUI.ninePatchToDrawable(btnPb);
+	
+	
+	var piT = ModPE.getBytesFromTexturePack("images/gui/pokeinv_top.9.png");
+	ModPE.log("Loading resource: "+ piT.length);
+	
+	var piTb = android.graphics.BitmapFactory.decodeByteArray(piT,0,piT.length);
+	ModPE.log("Bitmap is null: " + (piTb==null));
+	
+	MCGUI.Resources.pokeInvTop = MCGUI.ninePatchToDrawable(piTb);
+	
+	
+	var piM = ModPE.getBytesFromTexturePack("images/gui/pokeinv_middle.9.png");
+	ModPE.log("Loading resource: "+ piM.length);
+	
+	var piMb = android.graphics.BitmapFactory.decodeByteArray(piM,0,piM.length);
+	ModPE.log("Bitmap is null: " + (piMb==null));
+	
+	MCGUI.Resources.pokeInvMiddle = MCGUI.ninePatchToDrawable(piMb);
+	
+	
+	var piB = ModPE.getBytesFromTexturePack("images/gui/pokeinv_bottom.9.png");
+	ModPE.log("Loading resource: "+ piB.length);
+	
+	var piBb = android.graphics.BitmapFactory.decodeByteArray(piB,0,piB.length);
+	ModPE.log("Bitmap is null: " + (piBb==null));
+	
+	MCGUI.Resources.pokeInvBottom = MCGUI.ninePatchToDrawable(piBb);
 	
 	
  }
@@ -534,7 +688,7 @@ function guid() {
 				var rect = new android.graphics.Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
 				if(rect.contains(v.getLeft() + motionEvent.getX(), v.getTop() + motionEvent.getY()))
 				{
-					
+					Level.playSoundEnt(Player.getEntity(), "random.click", 100, 30);
 				}
 			}
 			if(action == android.view.MotionEvent.ACTION_MOVE)
@@ -586,8 +740,8 @@ function guid() {
 	return pw;
  }
  
- MCGUI.createRootLayout = function(pw){
-	var layout = new android.widget.RelativeLayout(Context);
+ MCGUI.createRootLayout = function(pLayout){
+	var layout = new pLayout(Context);
 	
 	
 	return layout;
