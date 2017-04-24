@@ -34,10 +34,10 @@
  var File = java.io.File;
  
  
- var Display = function(){
-	Display.HEIGHT = metrics.heightPixels;
-	Display.WIDTH = metrics.widthPixels;
- };
+ var Display = function(){}
+ 
+ Display.HEIGHT = metrics.heightPixels;
+ Display.WIDTH = metrics.widthPixels;
  
  var Android = function(){}
  
@@ -387,7 +387,7 @@
 		layout.setOrientation(Android.LinearLayout.VERTICAL);
 		for(var i=0;i<6;i++){
 			var btn = new android.widget.ImageButton(Context);
-			btn.setLayoutParams(new Android.LinearLayout.LayoutParams((Display.HEIGHT*0.6)/6,(Display.HEIGHT*0.6)/6));
+			btn.setLayoutParams(new Android.LinearLayout.LayoutParams(Display.HEIGHT/10,Display.HEIGHT/10));
 			btn.setPadding(0,4,0,8);
 			btn.setScaleType(android.widget.ImageView.ScaleType.FIT_CENTER);
 			if(i==0){ //Top
@@ -497,6 +497,10 @@ function guid() {
 		spawnedPokemon.push(s);
 	}
     
+ }
+ 
+ function screenChangeHook(screen){
+	ModPE.log("Screen Changed To: "+screen);
  }
  
  function attackHook(a,v){
