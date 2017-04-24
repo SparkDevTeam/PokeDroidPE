@@ -397,7 +397,7 @@
 			} else{ //Middle
 				MCGUI.setBackground(btn,MCGUI.Resources.pokeInvMiddle);
 			}
-			//btn.setImageDrawable(MCGUI.Resources.pokemonPlaceholder);
+			btn.setImageDrawable(MCGUI.Resources.pokemonPlaceholder);
 			layout.addView(btn);
 			PIButtons[i] = btn;
 			
@@ -501,6 +501,10 @@ function guid() {
  
  function screenChangeHook(screen){
 	ModPE.log("Screen Changed To: "+screen);
+	if(screen!="hud_screen" && !PokemonInventoryUI.isShowing()) PokemonInventoryUI.hide();
+	else if(screen=="hud_screen" && !PokemonInventoryUI.isShowing()){
+		PokemonInventoryUI.show();
+	}
  }
  
  function attackHook(a,v){
@@ -666,6 +670,14 @@ function guid() {
 	ModPE.log("Bitmap is null: " + (piBb==null));
 	
 	MCGUI.Resources.pokeInvBottom = MCGUI.ninePatchToDrawable(piBb);
+	
+	
+	var pP = ModPE.getBytesFromTexturePack("images/icons/004.png");
+	var pPb = android.graphics.BitmapFactory.decodeByteArray(pP,0,pP.length);
+	MCGUI.Resources.pokemonPlaceholder = new android.graphics.drawable.BitmapDrawable(pPb);
+	MCGUI.Resources.pokemonPlaceholder.setFilterBitmap(false);
+	MCGUI.Resources.pokemonPlaceholder.setDither(false);
+	MCGUI.Resources.pokemonPlaceholder.setAntiAlias(false);
 	
 	
  }
