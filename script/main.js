@@ -221,6 +221,13 @@
  }
  
  
+ var getDataFolder = function(){
+	var folder = new java.io.File(android.os.Environment.getExternalStorageDirectory().getAbsolutePath()+"/PokeDroidPE/");
+	if(!folder.exists())
+		folder.mkdirs();
+	return folder;
+ }
+ 
  
  /*
  *
@@ -683,6 +690,18 @@ function guid() {
 	MCGUI.Resources.pokemonPlaceholder.setAntiAlias(false);
 	
 	
+	var fontBytes = ModPE.getBytesFromTexturePack("images/minecraft.ttf");
+	var file = new java.io.File(getDataFolder().getAbsolutePath(),"font.ttf");
+	if(file.exists()) file.delete();
+	file.createNewFile();
+	var stream = new java.io.FileOutputStream(file);
+	stream.write(byteArray);
+	stream.close();
+	MCGUI.Resources.font = android.graphics.Typeface.createFromFile(file);
+	
+	
+	
+	
  }
  MCGUI.Button = function(){
 	var b = new android.widget.Button(Context);
@@ -740,6 +759,7 @@ function guid() {
 	
 	MCGUI.setBackground(b,MCGUI.Resources.buttonNormal);
 	b.setTextColor(android.graphics.Color.parseColor("#4c4c4c"));
+	b.setTypeface(MCGUI.Resources.font);
 
 	
 				
