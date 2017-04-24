@@ -36,8 +36,8 @@
  
  var Display = function(){}
  
- Display.HEIGHT = metrics.heightPixels;
- Display.WIDTH = metrics.widthPixels;
+ Display.HEIGHT = (metrics.widthPixels>metrics.heightPixels) ? metrics.heightPixels : metrics.widthPixels;
+ Display.WIDTH = (metrics.widthPixels>metrics.heightPixels) ? metrics.widthPixels : metrics.heightPixels;
  
  var Android = function(){}
  
@@ -388,14 +388,17 @@
 		for(var i=0;i<6;i++){
 			var btn = new android.widget.ImageButton(Context);
 			btn.setLayoutParams(new Android.LinearLayout.LayoutParams(Display.HEIGHT/10,Display.HEIGHT/10));
-			btn.setPadding(0,4,0,8);
+			//btn.setPadding(0,4,0,8);
 			btn.setScaleType(android.widget.ImageView.ScaleType.FIT_CENTER);
 			if(i==0){ //Top
 				MCGUI.setBackground(btn,MCGUI.Resources.pokeInvTop);
+				btn.setPadding(0,4,0,8);
 			} else if(i==5){ //Bottom
 				MCGUI.setBackground(btn,MCGUI.Resources.pokeInvBottom);
+				btn.setPadding(0,4,0,16);
 			} else{ //Middle
 				MCGUI.setBackground(btn,MCGUI.Resources.pokeInvMiddle);
+				btn.setPadding(0,0,0,8);
 			}
 			btn.setImageDrawable(MCGUI.Resources.pokemonPlaceholder);
 			layout.addView(btn);
@@ -423,7 +426,7 @@
  }
  
  PokemonInventoryUI.isShowing = function(){
-	return (PIWindow==null)
+	return (PIWindow==null);
  }
  
  
@@ -501,7 +504,7 @@ function guid() {
  
  function screenChangeHook(screen){
 	ModPE.log("Screen Changed To: "+screen);
-	if(screen!="hud_screen" && !PokemonInventoryUI.isShowing()) PokemonInventoryUI.hide();
+	if(screen!="hud_screen" && PokemonInventoryUI.isShowing()) PokemonInventoryUI.hide();
 	else if(screen=="hud_screen" && !PokemonInventoryUI.isShowing()){
 		PokemonInventoryUI.show();
 	}
